@@ -1011,8 +1011,8 @@ def base_html(
   <title>{esc(title)}</title>
   <meta name="description" content="{esc(description)}" />
   <link rel="canonical" href="{esc(canonical_for(mode, canonical))}" />
-  <link rel="icon" href="/favicon-16x16.png" sizes="16x16">
-  <link rel="icon" href="/favicon-32x32.png" sizes="32x32">
+  <link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png">
+  <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <style>
