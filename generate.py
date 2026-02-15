@@ -1688,34 +1688,28 @@ def build_regular_city_only(*, out: Path) -> None:
     - Generates / (homepage) + city pages /{city-st}/ + /contact/
     - Does NOT generate /cost/ or /how-to/
     - Navbar/Footer hide Cost + How-To
+    - City pages look exactly like regular mode city pages
   """
   mode: Mode = "regular_city_only"
-  urls: list[str] = ["/", "/contact/"]
 
+  # build_common writes contact (because feature(mode, "contact") is True)
+  # and returns sitemap URLs starting with "/"
+  urls = build_common(out=out, mode=mode)
+
+  # homepage (same factory as regular; it will hide Cost/How-To automatically)
   write_text(out / "index.html", homepage_html(mode=mode))
-  write_text(out / "contact" / "index.html", contact_page_html(mode=mode))
 
+  # city pages (use the same factory as regular)
   for city, st, col in CITIES:
     slug = f"{slugify(city)}-{slugify(st)}"
     write_text(
       out / slug / "index.html",
-      make_page(
+      city_page_html(
         mode=mode,
-        h1=f"{CONFIG.h1_short} in {city}, {st}",
+        city=city,
+        st=st,
+        col=col,
         canonical=f"/{slug}/",
-        nav_key="home",
-        sub=CONFIG.h1_sub,
-        inner=(
-          location_cost_section(city, st, col)
-          + "<hr />\n"
-          + make_section(headings=CONFIG.main_h2, paras=CONFIG.main_p)
-        ),
-        nav_show_cost=False,
-        nav_show_howto=False,
-        footer_show_cost=False,
-        footer_show_howto=False,
-        show_footer_cta=True,
-        nav_show_contact=True,
       ),
     )
     urls.append(f"/{slug}/")
@@ -1724,6 +1718,7 @@ def build_regular_city_only(*, out: Path) -> None:
   write_text(out / "sitemap.xml", sitemap_xml([canonical_for(mode, u) for u in urls]))
   write_text(Path(__file__).resolve().parent / "wrangler.jsonc", wrangler_content())
   print(f"✅ regular_city_only: Generated {len(urls)} pages into: {out.resolve()}")
+
 
 
 # ============================================================
