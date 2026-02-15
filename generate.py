@@ -87,6 +87,15 @@ US_STATE_NAMES: dict[str, str] = {
   "DC": "District of Columbia",
 }
 
+FAVICON_FILES: tuple[str, ...] = (
+  "favicon-master.png",
+  "favicon.ico",
+  "favicon.svg",
+  "favicon-16x16.png",
+  "favicon-32x32.png",
+  "apple-touch-icon.png",
+)
+
 
 # ============================================================
 # CONFIG
@@ -96,13 +105,6 @@ US_STATE_NAMES: dict[str, str] = {
 class SiteConfig:
   # Data
   cities_csv: Path = Path("cities.csv")
-
-  favicon_files: tuple[str, ...] = (
-    "favicon.ico",
-    "favicon-16x16.png",
-    "favicon-32x32.png",
-    "apple-touch-icon.png",
-  )
 
   # Build / assets
   output_dir: Path = Path("public")
@@ -1011,10 +1013,11 @@ def base_html(
   <title>{esc(title)}</title>
   <meta name="description" content="{esc(description)}" />
   <link rel="canonical" href="{esc(canonical_for(mode, canonical))}" />
-  <link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png">
-  <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <style>
 {CSS}
   </style>
@@ -1747,7 +1750,7 @@ def main() -> None:
   copy_static_files(
     src_dir=here,
     out_dir=out,
-    filenames=CONFIG.favicon_files,
+    filenames=FAVICON_FILES,
   )
 
   if SITE_MODE == "regular":  
